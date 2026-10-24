@@ -10,3 +10,6 @@ scikit-learn
 seaborn
 tqdm
 iterative-stratification
+torch
+torchvision
+segmentation-models-pytorch
