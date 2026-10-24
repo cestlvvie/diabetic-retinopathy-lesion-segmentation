@@ -1,0 +1,29 @@
+# dataset
+data/raw/
+data/processed/
+
+# model files
+checkpoints/
+*.pth
+*.pt
+*.ckpt
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# jupyter
+.ipynb_checkpoints/
+
+# macOS
+.DS_Store
+
+# experiment tracking
+wandb/
+runs/
+
+# IDE
+.vscode/
+.idea/

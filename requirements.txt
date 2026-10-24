@@ -1,0 +1,12 @@
+albumentations
+ipykernel
+jupyter
+matplotlib
+numpy
+opencv-python
+pandas
+Pillow
+scikit-learn
+seaborn
+tqdm
+iterative-stratification
