@@ -27,3 +27,8 @@ runs/
 # IDE
 .vscode/
 .idea/
+
+# outputs 
+outputs/
+*.pt
+*.pth
