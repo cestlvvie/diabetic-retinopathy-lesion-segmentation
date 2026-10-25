@@ -1,0 +1,7 @@
+Experiment,Mean Test Dice
+Random U-Net,0.291184
+ImageNet-pretrained U-Net,0.499532
+Lesion-aware U-Net,0.59303
+High-resolution + TTA,0.591222
+Multi-scale ensemble,0.606607
+Lesion-aware U-Net + TTA,0.608031

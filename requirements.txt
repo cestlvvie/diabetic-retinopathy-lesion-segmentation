@@ -1,15 +1,22 @@
-albumentations
-ipykernel
-jupyter
-matplotlib
-numpy
-opencv-python
-pandas
-Pillow
-scikit-learn
-seaborn
-tqdm
-iterative-stratification
-torch
-torchvision
-segmentation-models-pytorch
+# deep learning
+torch==2.11.0
+torchvision==0.26.0
+segmentation-models-pytorch==0.5.0
+
+# image processing and augmentation
+albumentations==2.0.8
+opencv-python-headless==5.0.0.93
+Pillow>=11.0,<13.0
+
+# data and evaluation
+numpy==2.5.4
+pandas==3.1.0
+scikit-learn==1.9.1
+tqdm==4.70.1
+iterative-stratification>=0.1.9,<0.2
+
+# visualization and notebooks
+matplotlib==3.11.2
+seaborn>=0.13,<0.14
+ipykernel>=6.0
+jupyter>=1.0

@@ -30,16 +30,21 @@ class IDRiDSegmentationDataset(Dataset):
         self.dataset_root = Path(dataset_root)
         self.transform = transform
 
+        if split == "test":
+            set_directory = "b. Testing Set"
+        else:
+            set_directory = "a. Training Set"
+
         self.image_directory = (
             self.dataset_root
             / "1. Original Images"
-            / "a. Training Set"
+            / set_directory
         )
 
         self.mask_root = (
             self.dataset_root
             / "2. All Segmentation Groundtruths"
-            / "a. Training Set"
+            / set_directory
         )
 
         if len(self.metadata) == 0:

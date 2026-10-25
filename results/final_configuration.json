@@ -1,0 +1,37 @@
+{
+    "input_resolution": 1024,
+    "tta": "horizontal_flip_average",
+    "lesions": {
+        "microaneurysms": {
+            "fusion": "average",
+            "models": [
+                "lesion_aware_1024",
+                "lesion_aware_768"
+            ],
+            "threshold": 0.38
+        },
+        "hemorrhages": {
+            "fusion": "average",
+            "models": [
+                "lesion_aware_1024",
+                "pretrained_baseline_768"
+            ],
+            "threshold": 0.48
+        },
+        "hard_exudates": {
+            "fusion": "single",
+            "models": [
+                "pretrained_baseline_768"
+            ],
+            "threshold": 0.9
+        },
+        "soft_exudates": {
+            "fusion": "average",
+            "models": [
+                "lesion_aware_1024",
+                "lesion_aware_768"
+            ],
+            "threshold": 0.32
+        }
+    }
+}

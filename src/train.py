@@ -11,7 +11,7 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 
 from src.dataset import IDRiDSegmentationDataset
-from src.losses import CombinedSegmentationLoss
+from src.losses import CombinedSegmentationLoss, LesionAwareLoss
 from src.model import create_model
 from src.transforms import (
     get_training_transforms,
@@ -185,7 +185,12 @@ def main(args):
         pretrained=args.pretrained
     ).to(device)
 
-    criterion = CombinedSegmentationLoss()
+    if args.loss == "lesion_aware":
+        criterion = LesionAwareLoss().to(device)
+    else:
+        criterion = CombinedSegmentationLoss().to(device)
+
+    print("Loss:", args.loss)
 
     optimizer = torch.optim.AdamW(
         model.parameters(),
@@ -208,8 +213,55 @@ def main(args):
     best_validation_loss = float("inf")
     epochs_without_improvement = 0
     history = []
+    start_epoch = 1
 
-    for epoch in range(1, args.epochs + 1):
+    if args.resume is not None:
+        resume_checkpoint = torch.load(
+            args.resume,
+            map_location=device,
+            weights_only=False,
+        )
+
+        model.load_state_dict(
+            resume_checkpoint["model_state_dict"]
+        )
+
+        if "optimizer_state_dict" in resume_checkpoint:
+            optimizer.load_state_dict(
+                resume_checkpoint["optimizer_state_dict"]
+            )
+
+        # Apply the new learning rate after restoring the optimizer.
+        for parameter_group in optimizer.param_groups:
+            parameter_group["lr"] = args.learning_rate
+
+        start_epoch = int(
+            resume_checkpoint.get("epoch", 0)
+        ) + 1
+
+        best_validation_loss = float(
+            resume_checkpoint.get(
+                "validation_loss",
+                float("inf"),
+            )
+        )
+
+        history_path = (
+            output_directory / "training_history.csv"
+        )
+
+        if history_path.exists():
+            history = pd.read_csv(
+                history_path
+            ).to_dict("records")
+
+        print(
+            f"Resuming from epoch {start_epoch} | "
+            f"best validation loss: "
+            f"{best_validation_loss:.4f}"
+        )
+
+    for epoch in range(start_epoch, args.epochs + 1):
         train_loss = train_one_epoch(
             model=model,
             loader=train_loader,
@@ -276,6 +328,7 @@ def main(args):
                     "epoch": epoch,
                     "model_state_dict": model.state_dict(),
                     "optimizer_state_dict": optimizer.state_dict(),
+                    "scheduler_state_dict": scheduler.state_dict(),
                     "validation_loss": validation_loss,
                     "dice_scores": dice_scores,
                     "image_size": args.image_size,
@@ -350,6 +403,17 @@ if __name__ == "__main__":
         "--seed",
         type=int,
         default=42,
+    )
+    parser.add_argument(
+        "--resume",
+        type=str,
+        default=None,
+    )
+    parser.add_argument(
+        "--loss",
+        type=str,
+        choices=["combined", "lesion_aware"],
+        default="combined",
     )
     parser.add_argument(
         "--pretrained",

@@ -1,0 +1,18 @@
+{
+    "test_images": 27,
+    "evaluation_resolution": [
+        1024,
+        1024
+    ],
+    "thresholds_selected_on": "validation_set",
+    "thresholds": {
+        "microaneurysms": 0.38,
+        "hemorrhages": 0.48,
+        "hard_exudates": 0.9,
+        "soft_exudates": 0.32
+    },
+    "mean_dice": 0.6066074129967899,
+    "mean_iou": 0.44223609115754986,
+    "mean_aupr": 0.6139292966277057,
+    "note": "Evaluated on the official IDRiD test split at 1024x1024 resolution."
+}
